@@ -1,0 +1,6 @@
+Utilizar memoria SD de 2 Gb
+Formatear:
+Sistema de archivos-> FAT16 (predeterminado)
+Tamaño de unidad de asignación-> Predeterminado
+Restaurar valores predeterminados
+Nombrar SD 

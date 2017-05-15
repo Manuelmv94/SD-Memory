@@ -1,0 +1,36 @@
+
+
+***************
+***  Capas  ***
+***************
+*  Aplicación *
+*    FAT      *
+* Comandos SD *
+*     SPI     *
+*     HW      *
+***************
+
+
+/************** FAT ******************/
+La memoria es de 2GB y usamos FAT16
+El tamaño de bloque es de 512 bytes
+/*************************************/
+
+
+/*********** Comandos SD *************/
+Lo primero que hacemos es poner la memoria en el modo que queremos, poniendo el  CS en cero y mandando el comando de reset.
+En cuanto a los comandos que se transmiten por SPI son de 6 bytes, y ahi viene el comando y un argumento de 32 bits
+Y la manera en que te responde es con un byte de banderas en el que puedes ver si la memoria ya se inicializó, o si el comando que usaste no existe
+Tambien cuando escribes un bloque recibes un byte que te dice que está bien, o que hubo un error
+Las transferencias de bloques tienen un byte de header, luego sigue el dato de 512 bytes, y luego un CRC de 16 bits.
+/*************************************/
+
+
+/*********** SPI *********************/
+El SPI se configura a 1MHz
+
+Para escribir o leer, la función recibe el buffer con un apuntador y el numero de bloque, manda el comando para configurar el bloque al que se va a escribir o leer y escribe o lee los 512 bytes
+
+En la función específica de escribir o leer, se pone CS en cero, primero manda el byte de inicio de bloque (0xFE) o espera a recibirlo en el caso de lectura, transmite/recibe todo el buffer byte por byte, luego el checksum de 16 bits, y después espera a ver si el  byte de respuesta es correcto, y pone el CS en uno.
+/*************************************/
+
